@@ -1,0 +1,38 @@
+<md-card class="new-note">
+  <form (ngSubmit)="addNewNote()" #noteForm="ngForm">
+    <h2>New Note</h2>
+    <md-input-container>
+      <textarea mdInput required placeholder="Content" [(ngModel)]="newNote.content"
+       name="content" #content="ngModel"></textarea>
+    </md-input-container>
+    <div [hidden]="content.valid || content.pristine">
+      Content is required
+    </div>
+    <button type="submit" md-fab [disabled]="!noteForm.form.valid"><md-icon>check</md-icon></button>
+  </form>
+</md-card>
+<md-card class="notes">
+  <h2>Notes</h2>
+  <div>
+    <button (click)="enableEdit()" md-fab *ngIf="!editMode"><md-icon>edit</md-icon></button>
+    <button (click)="saveEdit()" md-fab *ngIf="editMode"><md-icon>save</md-icon></button>
+  </div>
+  <md-card *ngFor="let note of notes">
+    <form>
+      <md-input-container>
+        <textarea class="note" mdInput required [disabled]="!editMode"
+         [(ngModel)]="note.content" name="content"
+         #content="ngModel" [ngClass]="{'done': note.done}">
+        </textarea>
+      </md-input-container>
+      <div [hidden]="note.content">
+        Content is required
+      </div>
+    </form>
+    <div>
+      <button md-mini-fab (click)="deleteNote(note)"><md-icon>delete</md-icon></button>
+      <button md-mini-fab *ngIf="note.done" (click)="makeUndone(note)"><md-icon>undo</md-icon></button>
+      <button md-mini-fab *ngIf="!note.done" (click)="makeDone(note)"><md-icon>done</md-icon></button>
+    </div>
+  </md-card>
+</md-card>
